@@ -1,10 +1,13 @@
 const main = require('./index');
 
-module.exports = (replyText) => (word) => main(word).then(res => {
+module.exports = (replyFn) => (word) => main(word).then(res => {
   if(res.status === 200){
     const {text:[result]} = res.data;
-    replyText(word, result);
+    replyFn(word, result);
+  }else{
+    replyFn('something strange');
   }
 }).catch(err => {
-  console.log('err ', err);
+  console.log('err ', err.message);
+  replyFn('something went wrong');
 });

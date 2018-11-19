@@ -1,5 +1,6 @@
 const express = require( "express" );
 const bodyParser = require('body-parser');
+const Sequelize = require('sequelize');
 
 // create an express object: a Web server
 const app = express();
@@ -44,8 +45,15 @@ app.get( "*", function( request, response ) {
   response.send( "no special" );
 });
 
-
-const port = process.env.PORT;
+// const sequelize = new Sequelize('discord_db', 'root', '123456', {
+//   dialect: 'mysql',
+//   host: "localhost",
+//   port: 13306,
+// });
+// sequelize.query("SELECT * FROM user").then(myTableRows => {
+//   console.log('tables', myTableRows)
+// });
+const port = process.env.PORT || 4000;
 app.listen( port );
 console.log('express server on ' + port);
 module.exports = app;

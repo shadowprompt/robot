@@ -21,9 +21,12 @@ module.exports = {
         });
         replyFn(index, '=');
       });
+    }else{
+      replyFn('something strange');
     }
   }).catch(err => {
-    console.log('err ', err);
+    console.log('err ', err.message);
+    replyFn('something went wrong');
   }),
   slack: (replyFn) =>(word) => main(word).then(res => {
     const resultJson = {
@@ -97,11 +100,13 @@ module.exports = {
           "dismiss_text": "No"
         }
       }];
-
       console.log('resultJson ', resultJson);
       replyFn(resultJson);
+    }else{
+      replyFn('something strange');
     }
   }).catch(err => {
-    console.log('err ', err);
+    console.log('err ', err.message);
+    replyFn('something went wrong');
   }),
 };
