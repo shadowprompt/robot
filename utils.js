@@ -1,7 +1,8 @@
 module.exports = {
-  recurseCb: function getInfo(cb){
+  recurseCb: function getInfo(msg){
     return function(item, name, alias ){
       const type = Object.prototype.toString.call(item);
+      const cb = msg.reply;
       switch(type){
         case '[object String]':
           cb(`${item}: ${name}`);

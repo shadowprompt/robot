@@ -6,10 +6,15 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "chalk": "^2.4.1",
+    "discord-rich-presence": "0.0.7",
     "discord.js": "^11.4.2",
     "env2": "^2.2.2",
     "express": "^4.16.4",
+    "moment": "^2.22.2",
+    "moment-duration-format": "^2.2.2",
     "mysql2": "^1.6.4",
+    "querystring": "^0.2.0",
     "sequelize": "^4.41.2"
   },
   "devDependencies": {
