@@ -8,5 +8,5 @@ module.exports = (word) => {
     text: word,
   };
   const url = `${BASE_URL}/api/v1.5/tr.json/translate?lang=en-zh&key=${api_key}`;
-  return axios.get(url, {params});
+  return axios.get(url, { params });
 };
