@@ -11,5 +11,5 @@ module.exports = (words) => {
   // call
   slackWebHookAction(firstWord);
   daozhaoTranslateAction(firstWord);
-  daozhaoDictAction(words);
+  daozhaoDictAction(firstWord);
 };
