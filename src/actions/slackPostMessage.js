@@ -27,7 +27,7 @@ module.exports = (result) => new Promise(((resolve, reject) => {
   });
 
   externalRequest.on('error', (err) => {
-    console.log('externalRequest error ', err);
+    console.log('externalRequest error ', err.message);
     reject('externalRequest error');
   });
   externalRequest.write(JSON.stringify(result));

@@ -6,5 +6,5 @@ module.exports = (word) => axios.post(SLACK_HOOK_URL, {
 }).then(() => {
   console.log('slack hook success')
 }).catch(err => {
-  console.log('slack hook error', err)
+  console.log('slack hook error', err.message)
 });

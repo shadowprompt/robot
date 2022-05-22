@@ -1,5 +1,5 @@
 const path = require("path");
-const envPath = path.join(__dirname, "./.env");
+const envPath = path.join(__dirname, "../.env");
 require("env2")(envPath);
 const Discord = require("discord.js");
 const { promisify } = require("util");
@@ -9,7 +9,9 @@ const server = require("./server"); // load express server
 
 const initServer = () => {
   const port = process.env.PORT || 4000;
-  server.listen(port);
+  server.listen(port, function (){
+    console.log('aaa -> ', arguments);
+  });
   console.log("express server on " + port);
 };
 
@@ -38,7 +40,7 @@ const init = async () => {
   // Here we load **commands** into memory, as a collection, so they're accessible
   // here and everywhere else.
   // also set the aliases
-  const cmdFiles = await readdir("./commands/");
+  const cmdFiles = await readdir(path.join(__dirname, "./commands/"));
   client.logger.log(`Loading a total of ${cmdFiles.length} commands.`);
   cmdFiles.forEach(f => {
     if (!f.endsWith(".js")) return;
@@ -47,7 +49,7 @@ const init = async () => {
   });
 
   // Then we load events, which will include our message and ready event.
-  const evtFiles = await readdir("./events/");
+  const evtFiles = await readdir(path.join(__dirname, "./events/"));
   client.logger.log(`Loading a total of ${evtFiles.length} events.`);
   evtFiles.forEach(file => {
     const eventName = file.split(".")[0];

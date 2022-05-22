@@ -6,5 +6,5 @@ module.exports = (word) => axios.post(TRANSLATE_URL, {
 }).then(() => {
   console.log('translate sendBack success')
 }).catch(err => {
-  console.log('translate sendBack error ', err)
+  console.log('translate sendBack error ', err.message)
 });

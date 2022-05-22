@@ -4,5 +4,5 @@ module.exports = (words) => axios.post('https://www.daozhao.com.cn/dict', {
 }).then(res => {
   console.log('store success')
 }).catch(err => {
-  console.log('store error ', err)
+  console.log('store error ', err.message)
 });
