@@ -10,6 +10,13 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
+app.use(((req, res, next) => {
+  const method = req.method || '';
+  console.log('request:', method, req.url);
+  console.log(`request: ${method} data ->`, method.toLowerCase() === 'post' ? req.body : req.query);
+  next();
+}))
+
 app.use('/slack', slackRouters);
 app.use('/translate', translateRouters);
 
@@ -17,8 +24,8 @@ app.get("/", function (request, response) {
   response.send("<h1>Hello :)</h1><p><a href='/about'>About</a></p>");
 });
 
-app.get("*", function (request, response) {
-  console.log('* url', request.url);
+app.use("*", function (request, response) {
+  console.log('* request default handler', request.url);
   if (request.url.toLowerCase().includes('auth')) {
     console.log(`auth=${request.url}:${request.body}`);
     response.json({

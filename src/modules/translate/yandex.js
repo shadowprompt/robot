@@ -1,7 +1,7 @@
 const axios = require('axios');
 
-const api_key = process.env.YANDEX_API_KEY;
-const BASE_URL = 'https://translate.yandex.net';
+const api_key = process.env.YANDEX_TRANSLATE_API_KEY;
+const BASE_URL = process.env.YANDEX_TRANSLATE_API_BASE_URL;
 
 module.exports = (word) => {
   const params = {

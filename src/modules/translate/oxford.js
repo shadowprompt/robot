@@ -1,8 +1,8 @@
 const axios = require('axios');
 
-const app_id = process.env['DICTIONARY_APP_ID'];
-const app_key = process.env['DICTIONARY_APP_KEY'];
-const BASE_URL = 'https://od-api.oxforddictionaries.com/api/v2';
+const app_id = process.env.OXFORD_DICTIONARIES_APP_ID;
+const app_key = process.env.OXFORD_DICTIONARIES_APP_KEY;
+const BASE_URL = process.env.OXFORD_DICTIONARIES_BASE_URL;
 
 module.exports = (word) => {
   console.log('oxford translate ', word);

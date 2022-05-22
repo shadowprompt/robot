@@ -8,11 +8,10 @@ const readdir = promisify(require("fs").readdir);
 const server = require("./server"); // load express server
 
 const initServer = () => {
-  const port = process.env.PORT || 4000;
+  const port = process.env.PORT || 6060;
   server.listen(port, function (){
-    console.log('aaa -> ', arguments);
+    console.log("express server on " + port);
   });
-  console.log("express server on " + port);
 };
 
 const client = new Discord.Client();
