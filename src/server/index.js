@@ -1,5 +1,6 @@
 const express = require("express");
 const slackRouters = require('./routers/slack');
+const telegramRouters = require('./routers/telegram');
 const translateRouters = require('./routers/translate');
 const bodyParser = require('body-parser');
 
@@ -18,6 +19,7 @@ app.use(((req, res, next) => {
 }))
 
 app.use('/slack', slackRouters);
+app.use('/telegram', telegramRouters);
 app.use('/translate', translateRouters);
 
 app.get("/", function (request, response) {

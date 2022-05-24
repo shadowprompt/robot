@@ -35,7 +35,7 @@ client.aliases = new Map();
 client.settings = new Map();
 client.levelCache = {};
 
-const init = async () => {
+const initDiscordRobot = async () => {
   // Here we load **commands** into memory, as a collection, so they're accessible
   // here and everywhere else.
   // also set the aliases
@@ -69,4 +69,9 @@ const init = async () => {
   // End top-level async/await function.
 };
 
-init().then(initServer);
+initDiscordRobot().then(() => {
+  console.log('initial discord success -> ', );
+}).catch(err => {
+  console.log('initial discord failed -> ', err.message);
+});
+initServer();
