@@ -1,5 +1,5 @@
 const axios = require('axios');
-const TRANSLATE_URL = 'http://robot.daozhao.com.cn/translate';
+const TRANSLATE_URL = 'https://robot.daozhao.com.cn/translate';
 
 module.exports = (word) => axios.post(TRANSLATE_URL, {
   text: word,
