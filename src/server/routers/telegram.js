@@ -29,6 +29,7 @@ bot.on('message', (msg) => {
   // send a message to the chat acknowledging receipt of their message
   // bot.sendMessage(chatId, 'Received your message');
   console.log('message:', moment(msg.date * 1000).format('YYYY-MM-DD HH:mm:ss'), msg.text);
+  bot.sendMessage(chatId, "received: " + msg.text);
 });
 
 module.exports = router;
