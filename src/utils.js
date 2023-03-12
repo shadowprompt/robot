@@ -1,3 +1,43 @@
+const worker_threads = require("worker_threads");
+
+function addSlackAction(result) {
+  const lastAttachment = result.attachments[result.attachments.length - 1];
+  lastAttachment.footer = "from Dictionary Api";
+  lastAttachment.color = "#FF9333";
+  lastAttachment.ts = Date.now();
+  lastAttachment.callback_id = "word_remembered";
+  lastAttachment.actions = [
+    {
+      name: "game",
+      text: "Remembered",
+      type: "button",
+      value: "1",
+      style: "primary"
+    },
+    {
+      name: "game",
+      text: "Not...",
+      type: "button",
+      value: "0",
+      style: "danger"
+    },
+    {
+      name: "game",
+      text: "I don't know .",
+      type: "button",
+      value: "-1",
+      style: "danger",
+      confirm: {
+        title: "Are you sure?",
+        text: "Wouldn't you prefer to give up?",
+        ok_text: "Yes",
+        dismiss_text: "No"
+      }
+    }
+  ];
+  return result;
+}
+
 module.exports = {
   recurseCb: function getInfo(msg){
     return function(item, name, alias ){
@@ -26,11 +66,16 @@ module.exports = {
       }
     } 
   },
-  generateSlackResult: ({ word, results = [] }, isExternal = false) => {
+  generateSlackResult: (data, isExternal = false) => {
+    const results = data || [];
+    const [first = {}] = results;
+
+    const attachments = [];
     const resultJson = {
-      text: word,
-      attachments: []
+      text: first.word,
+      attachments,
     };
+
     if (isExternal) {
       resultJson.channel = process.env.SLACK_MESSAGE_CHANNEL;
     }
@@ -39,116 +84,82 @@ module.exports = {
         color: "#3366FF",
         fields: []
       };
-      resultJson.attachments.push(attachment);
-      result.lexicalEntries.forEach(lexicalEntry => {
+      attachments.push(attachment);
+      // 读音
+      const phonetics = result.phonetics || [];
+      phonetics.forEach(phonetic =>  {
         attachment.fields.push({
-          title: lexicalEntry.lexicalCategory,
-          value: (lexicalEntry.pronunciations || [])
-            .map(
-              item =>
-                `${(item.dialects || []).join(" ")} -> ${item.phoneticSpelling}`
-            )
-            .join(","),
-          short: true
-        });
-        lexicalEntry.entries &&
-        lexicalEntry.entries.forEach(entry => {
-          entry.senses &&
-          entry.senses.forEach(sense => {
-            let att = {
-              title: "Definition",
-              text: (sense.definitions || []).join(","),
-              color: "#66C947",
-              fields: []
-            };
-            sense.examples &&
-            sense.examples.forEach(example => {
-              att.fields.push({
-                title: "Example",
-                value: example.text,
-                short: true
-              });
-            });
-            resultJson.attachments.push(att);
-          });
+          title: phonetic.text,
+          value: phonetic.audio || '',
         });
       });
-    });
-    const lastAttachment =
-      resultJson.attachments[resultJson.attachments.length - 1];
-    lastAttachment.footer = "from Dictionary Api";
-    lastAttachment.color = "#FF9333";
-    lastAttachment.ts = Date.now();
-    lastAttachment.callback_id = "word_remembered";
-    lastAttachment.actions = [
-      {
-        name: "game",
-        text: "Remembered",
-        type: "button",
-        value: "1",
-        style: "primary"
-      },
-      {
-        name: "game",
-        text: "Not...",
-        type: "button",
-        value: "0",
-        style: "danger"
-      },
-      {
-        name: "game",
-        text: "I don't know .",
-        type: "button",
-        value: "-1",
-        style: "danger",
-        confirm: {
-          title: "Are you sure?",
-          text: "Wouldn't you prefer to give up?",
-          ok_text: "Yes",
-          dismiss_text: "No"
-        }
-      }
-    ];
-    return resultJson;
+      // 语义及其示例
+      const meanings = result.meanings || [];
+      meanings.forEach(meaning =>  {
+
+        const partOfSpeech = meaning.partOfSpeech; // 词性
+        const definitions = meaning.definitions || [];
+
+        attachments.push({
+          color: "#ff1010",
+          fields: [{
+            title: 'Definition & Example',
+            value: partOfSpeech,
+          }]
+        });
+
+        definitions.forEach(definition => {
+          let att = {
+            title: definition.definition,
+            text: '',
+            color: "#66C947",
+            fields: [{
+              title: definition.example ? 'Example' : '',
+              value: definition.example,
+            }],
+          };
+          attachments.push(att);
+        });
+      })
+    })
+    // 添加交互动作
+    return addSlackAction(resultJson);
   },
-  generateDiscordResult: ({ word, results = [] }) => {
+  generateDiscordResult: (data) => {
+    const results = data || [];
+    const [first = {}] = results;
+
     const fields = [];
     const resultJson = {
       embed: {
-        title: word,
+        title: first.word,
         fields
       }
     };
     results.forEach(result => {
-      result.lexicalEntries.forEach(lexicalEntry => {
+      // 读音
+      const phonetics = result.phonetics || [];
+      phonetics.forEach(phonetic => {
         fields.push({
-          name:
-            (lexicalEntry.lexicalCategory &&
-              lexicalEntry.lexicalCategory.text) ||
-            "",
-          value: lexicalEntry.pronunciations
-            ? lexicalEntry.pronunciations
-              .map(
-                item =>
-                  `${(item.dialects || []).join(" ")} -> ${
-                    item.phoneticSpelling
-                  }`
-              )
-              .join(",")
-            : "same pronunciations"
+          name: phonetic.text,
+          value: phonetic.audio || 'same pronunciations',
         });
-        lexicalEntry.entries &&
-        lexicalEntry.entries.forEach(entry => {
-          entry.senses &&
-          entry.senses.forEach(sense => {
-            sense.examples &&
-            sense.examples.forEach(example => {
-              fields.push({
-                name: "Example",
-                value: example.text,
-                inline: true
-              });
-            });
+      });
+      // 语义及其示例
+      const meanings = result.meanings || [];
+      meanings.forEach(meaning =>  {
+        const partOfSpeech = meaning.partOfSpeech; // 词性
+        const definitions = meaning.definitions || [];
+        fields.push({
+          name: partOfSpeech,
+          value: '--',
+        });
+
+        definitions.forEach(definition => {
+          fields.push({
+            name: definition.definition,
+            value: definition.example || '--',
+            inline: true
           });
         });
       });
