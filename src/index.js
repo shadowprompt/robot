@@ -4,6 +4,7 @@ require("env2")(envPath);
 const Discord = require("discord.js");
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
+const telegram = require('./robots/telegram');
 
 const server = require("./server"); // load express server
 
@@ -69,9 +70,14 @@ const initDiscordRobot = async () => {
   // End top-level async/await function.
 };
 
+const initTelegram = () => {
+  telegram();
+}
+
 initDiscordRobot().then(() => {
   console.log('initial discord success -> ', );
 }).catch(err => {
   console.log('initial discord failed -> ', err.message);
 });
 initServer();
+// initTelegram();
