@@ -7,4 +7,4 @@ const initTelegram = require('./modules/telegram');
 
 initDiscord();
 initServer();
-// initTelegram();
+initTelegram();
