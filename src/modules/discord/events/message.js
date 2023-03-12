@@ -3,7 +3,7 @@
 // goes `client, other, args` when this function is run.
 module.exports = async (client, message) => {
   client.logger.log(`author: ${message.author}, bot: ${message.author.bot}, content: ${message.content}`);
-  // Grab the settings for this server from Enmap.
+  // Grab the settings for this slack from Enmap.
   // If there is no guild, get default conf (DMs)
   // const settings = message.settings = client.getSettings(message.guild.id);
   const settings = (message.settings = client.config.defaultSettings);

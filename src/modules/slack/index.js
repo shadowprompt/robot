@@ -3,7 +3,7 @@ const slackRouters = require('./routers/slack');
 const translateRouters = require('./routers/translate');
 const bodyParser = require('body-parser');
 
-// create an express object: a Web server
+// create an express object: a Web slack
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -36,4 +36,12 @@ app.use("*", function (request, response) {
   }
 });
 
-module.exports = app;
+const init = () => {
+  const port = process.env.PORT || 6060;
+  app.listen(port, function (){
+    console.log("slack server listening on " + port);
+  });
+};
+
+
+module.exports = init;

@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const getTranslation = require("../../modules/translate/getTranslation");
-const slackPostMessageAction = require("../../actions/slackPostMessage");
-const utils = require("../../utils");
+const getTranslation = require("../../../services/translate/getTranslation");
+const slackPostMessageAction = require("../../../actions/slackPostMessage");
+const utils = require("../../../utils");
 
 router.post('/', (req, res) => {
   const {

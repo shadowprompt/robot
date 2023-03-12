@@ -4,7 +4,7 @@ const moment = require('moment');
 // replace the value below with the Telegram token you receive from @BotFather
 const token = '5329428908:AAGYRRTXy79EGW2h3kPoImg7pqNam5iVe3o';
 
-module.exports = () => {
+const init = () => {
   // Create a bot that uses 'polling' to fetch new updates
   const bot = new TelegramBot(token, {polling: true});
 
@@ -32,3 +32,5 @@ module.exports = () => {
     bot.sendMessage(chatId, "received: " + msg.text);
   });
 }
+
+module.exports = init;
