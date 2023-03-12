@@ -13,9 +13,10 @@ router.post('/', (req, res) => {
     getTranslation([text]).then(response => {
       const resultJson = utils.generateSlackResult(response.data);
       res.send(resultJson);
+    }).catch(err => {
+      console.log('err', err)
+      res.send('getTranslation error');
     });
-
-  // }else if(response_url.includes('www.daozhao.com.cn')){
   } else {
     getTranslation([text]).then(response => {
       const resultJson = utils.generateSlackResult(response.data, true);
@@ -24,6 +25,9 @@ router.post('/', (req, res) => {
           postMessage: 'success'
         });
       })
+    }).catch(err => {
+      console.log('err', err)
+      res.send('getTranslation external error')
     });
   }
 });
