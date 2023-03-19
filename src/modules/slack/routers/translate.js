@@ -14,7 +14,7 @@ router.post('/', (req, res) => {
       const resultJson = utils.generateSlackResult(response.data);
       res.send(resultJson);
     }).catch(err => {
-      console.log('err', err)
+      console.log('slack getTranslation error', err.message)
       res.send('getTranslation error');
     });
   } else {
@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
         });
       })
     }).catch(err => {
-      console.log('err', err)
+      console.log('slack getTranslation external error', err.message)
       res.send('getTranslation external error')
     });
   }

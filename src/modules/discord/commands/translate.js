@@ -13,8 +13,8 @@ exports.run = (client, message, args, level) => {
       const slackJson = utils.generateDiscordResult(response.data);
       client.emit('translateResult', slackJson);
     }).catch((err) => {
-      console.log('t error => ', err);
-      message.reply('something strange');
+      console.log('discord getTranslation error => ', err.message);
+      message.reply(`discord getTranslation error:${err.message}`);
     });
   } else {
     // Show individual command's help.
