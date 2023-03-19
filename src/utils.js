@@ -3,6 +3,7 @@ const oxfordSlackResult = ({ word, results = [] }, isExternal = false) => {
     text: word,
     attachments: []
   };
+  // 外部请求(比如是discord触发的)则直接发送给指定的channel
   if (isExternal) {
     resultJson.channel = process.env.SLACK_MESSAGE_CHANNEL;
   }
@@ -174,7 +175,7 @@ const dictionaryAPISlackResult = (data, isExternal = false) => {
     text: first.word,
     attachments,
   };
-
+  // 外部请求(比如是discord触发的)则直接发送给指定的channel
   if (isExternal) {
     resultJson.channel = process.env.SLACK_MESSAGE_CHANNEL;
   }

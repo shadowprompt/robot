@@ -2,16 +2,13 @@ const utils = require("../../../utils");
 const getTranslation = require("../../../services/translate/getTranslation");
 const helpCommand = require('./help');
 exports.run = (client, message, args, level) => {
-  // 同时触发translate消息广播
-  client.emit('translate', args); // the client is already bind on client listen message
 
   if (args.length > 0) {
     getTranslation(args).then(response => {
       const resultJson = utils.generateDiscordResult(response.data);
       message.channel.send(resultJson);
-      // 生成slack格式结果的并触发translateResult消息广播
-      const slackJson = utils.generateDiscordResult(response.data);
-      client.emit('translateResult', slackJson);
+      // 触发translateResult消息广播翻译结果
+      client.emit('translateResult', response.data);
     }).catch((err) => {
       console.log('discord getTranslation error => ', err.message);
       message.reply(`discord getTranslation error:${err.message}`);
